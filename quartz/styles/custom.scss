@@ -1,3 +1,267 @@
 @use "./variables.scss" as *;
 
-// put your custom CSS here!
+// ============================================================================
+// Minimal serif aesthetic inspired by bleuje
+// ============================================================================
+
+// --- Page title: large right-aligned serif ---
+.page-title {
+  font-size: 3.2rem;
+  text-align: right;
+  margin-bottom: 0.2rem;
+  font-family: var(--headerFont);
+  font-weight: 400;
+
+  a {
+    color: var(--dark) !important;
+    font-weight: 400;
+  }
+}
+
+// --- Tagline injected via pseudo-element ---
+.page-title::after {
+  content: "Loops, creative coding.";
+  display: block;
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--darkgray);
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--bodyFont);
+}
+
+// --- Left sidebar: right-aligned, black bg, scarlet red bar ---
+.sidebar.left {
+  align-items: flex-end;
+  text-align: right;
+  border-right: none;
+  padding-right: 2rem;
+  position: sticky;
+
+  // Vertical bar, shorter than full height
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 4rem;
+    bottom: 4rem;
+    width: 3px;
+    background-color: var(--dark);
+  }
+}
+
+// --- Footer in sidebar: repurposed as navigation ---
+.sidebar.left footer {
+  opacity: 1;
+  margin-bottom: 0;
+  text-align: right;
+
+  // Hide the "Created with Quartz" paragraph
+  > p {
+    display: none;
+  }
+
+  // Style navigation links as vertical list with bullets
+  ul {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    margin-top: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  ul li {
+    font-size: 1.1rem;
+    font-family: var(--bodyFont);
+  }
+
+  ul li a {
+    color: var(--dark);
+    font-weight: 400;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    background-color: transparent;
+    padding: 0;
+
+    &:hover {
+      color: var(--tertiary);
+    }
+  }
+}
+
+// --- Hide the BOTTOM footer (grid-footer area) to prevent duplication ---
+#quartz-body > footer {
+  display: none !important;
+}
+
+// --- Main content area: clean serif styling ---
+.center {
+  padding-right: 15% !important;
+}
+
+.center article {
+  font-family: var(--bodyFont);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 650px;
+}
+
+// --- Article title: large centered ---
+article > h1,
+.article-title {
+  font-size: 2rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+// --- Subheadings ---
+.center article h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+}
+
+// --- Remove horizontal rules ---
+.page-header {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  padding-right: 15% !important;
+}
+
+hr {
+  display: none;
+}
+
+// --- Remove background highlight from internal links ---
+a.internal {
+  background-color: transparent !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 400;
+}
+
+// --- Bold label for "Contact:" style text ---
+.center article strong {
+  font-weight: 700;
+}
+
+// --- Remove right sidebar completely on all screens ---
+.sidebar.right {
+  display: none !important;
+}
+
+// --- Adjust grid to two-column (no right sidebar), wider sidebar ---
+.page > #quartz-body {
+  grid-template-columns: 500px auto !important;
+  column-gap: 2rem !important;
+  grid-template-areas:
+    "grid-sidebar-left grid-header"
+    "grid-sidebar-left grid-center"
+    "grid-sidebar-left grid-footer" !important;
+}
+
+// --- Tablet: also two-column ---
+@media all and (min-width: 800px) and (max-width: 1200px) {
+  .page > #quartz-body {
+    grid-template-columns: 420px auto !important;
+    column-gap: 1.5rem !important;
+    grid-template-areas:
+      "grid-sidebar-left grid-header"
+      "grid-sidebar-left grid-center"
+      "grid-sidebar-left grid-footer" !important;
+  }
+}
+
+// --- Overall body typography ---
+body {
+  font-family: var(--bodyFont);
+  -webkit-font-smoothing: antialiased;
+}
+
+// --- Remove all link background highlights, lighten weight ---
+a {
+  font-weight: 400;
+}
+
+// --- Hide note-properties view ---
+.note-properties {
+  display: none !important;
+}
+
+// --- Mobile menu hamburger button (injected by JS) ---
+.mobile-menu-btn {
+  display: none;
+}
+
+// --- Mobile adjustments ---
+@media all and (max-width: 800px) {
+  .page > #quartz-body {
+    grid-template-columns: auto !important;
+    grid-template-areas:
+      "grid-sidebar-left"
+      "grid-header"
+      "grid-center"
+      "grid-footer" !important;
+  }
+
+  .sidebar.left {
+    border-right: none;
+    border-bottom: none;
+    padding: 1.5rem 1rem;
+    position: initial !important;
+    height: unset !important;
+    align-items: center;
+    text-align: center;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  // Page title centered on mobile
+  .sidebar.left .page-title {
+    text-align: center;
+  }
+
+  // Show hamburger button on mobile
+  .mobile-menu-btn {
+    display: block;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--dark);
+    background: none;
+    border: none;
+    padding: 0.3rem 0;
+    user-select: none;
+    font-family: var(--bodyFont);
+    letter-spacing: 0.05em;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  // Nav hidden by default on mobile
+  .sidebar.left footer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    width: 100%;
+  }
+
+  // Show nav when menu is open
+  .sidebar.left.menu-open footer {
+    max-height: 500px;
+  }
+
+  .sidebar.left footer ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+  }
+}
