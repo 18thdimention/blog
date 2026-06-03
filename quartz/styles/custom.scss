@@ -167,15 +167,23 @@ a.internal {
     "grid-sidebar-left grid-footer" !important;
 }
 
-// --- Tablet: also two-column ---
+// --- Tablet: narrower sidebar ---
 @media all and (min-width: 800px) and (max-width: 1200px) {
   .page > #quartz-body {
-    grid-template-columns: 420px auto !important;
+    grid-template-columns: 260px auto !important;
     column-gap: 1.5rem !important;
     grid-template-areas:
       "grid-sidebar-left grid-header"
       "grid-sidebar-left grid-center"
       "grid-sidebar-left grid-footer" !important;
+  }
+
+  .page-title {
+    font-size: 2.4rem;
+  }
+
+  .site-footer-text {
+    font-size: 0.75rem;
   }
 }
 
@@ -262,6 +270,7 @@ a {
     padding: 1.5rem 1rem;
     position: initial !important;
     height: unset !important;
+    flex-direction: column !important;
     align-items: center;
     text-align: center;
 
@@ -275,21 +284,28 @@ a {
     text-align: center;
   }
 
+  // Tagline centered
+  .sidebar.left .page-title::after {
+    text-align: center;
+  }
+
   // Show hamburger button on mobile
   .mobile-menu-btn {
     display: block;
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: var(--dark);
     background: none;
-    border: none;
-    padding: 0.3rem 0;
+    border: 1px solid var(--gray);
+    border-radius: 4px;
+    padding: 0.4rem 1.2rem;
     user-select: none;
     font-family: var(--bodyFont);
     letter-spacing: 0.05em;
+    margin-top: 0.5rem;
 
     &:hover {
-      color: rgba(255, 255, 255, 0.7);
+      border-color: var(--dark);
     }
   }
 
@@ -299,9 +315,10 @@ a {
     overflow: hidden;
     transition: max-height 0.3s ease;
     width: 100%;
+    text-align: center;
   }
 
-  // Show nav when menu is open
+  // Show nav when menu is open — expands vertically below
   .sidebar.left.menu-open footer {
     max-height: 500px;
   }
@@ -311,5 +328,41 @@ a {
     align-items: center;
     gap: 0.5rem;
     margin-top: 0.8rem;
+  }
+
+  // Move footer out of sidebar visually — pin to bottom of page
+  .sidebar.left {
+    position: relative !important;
+  }
+
+  .site-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 0.8rem 1rem;
+    background-color: var(--light);
+    z-index: 10;
+  }
+
+  // Add bottom padding to page so content doesn't hide behind fixed footer
+  .page > #quartz-body {
+    padding-bottom: 3rem;
+  }
+
+  // Center content area on mobile
+  .center {
+    padding-right: 0 !important;
+  }
+
+  .page-header {
+    padding-right: 0 !important;
+  }
+
+  article > h1,
+  .article-title {
+    padding-right: 0;
+    text-align: center;
   }
 }
