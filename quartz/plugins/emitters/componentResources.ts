@@ -258,6 +258,73 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
     `)
   }
 
+  // Custom site footer and mobile menu
+  componentResources.afterDOMLoaded.push(`
+    function setupPageFooter() {
+      const sidebar = document.querySelector(".sidebar.left");
+      if (!sidebar) return;
+      const existing = sidebar.querySelector(".site-footer");
+      if (existing) existing.remove();
+
+      const footer = document.createElement("div");
+      footer.className = "site-footer";
+      footer.innerHTML =
+        '<p class="site-footer-text">' +
+        '\\u00A9 2026 Doyeon Kim | ' +
+        '<a href="https://x.com/yxrjkv" target="_blank" rel="noopener noreferrer">Twitter</a> | ' +
+        '<a href="https://github.com/18thdimention" target="_blank" rel="noopener noreferrer">Github</a> | ' +
+        '<a href="#" class="copy-email" data-email="18thdimention@gmail.com">Email</a>' +
+        '</p>';
+      sidebar.appendChild(footer);
+
+      const emailLink = footer.querySelector(".copy-email");
+      if (emailLink) {
+        emailLink.addEventListener("click", function(e) {
+          e.preventDefault();
+          const email = this.getAttribute("data-email");
+          navigator.clipboard.writeText(email).then(function() {
+            const msg = document.createElement("span");
+            msg.className = "copy-toast";
+            msg.textContent = "Email copied to clipboard!";
+            emailLink.parentElement.appendChild(msg);
+            setTimeout(function() { msg.remove(); }, 2000);
+          });
+        });
+      }
+    }
+
+    function setupMobileMenu() {
+      const sidebar = document.querySelector(".sidebar.left");
+      if (!sidebar) return;
+      const existing = sidebar.querySelector(".mobile-menu-btn");
+      if (existing) existing.remove();
+
+      const btn = document.createElement("button");
+      btn.className = "mobile-menu-btn";
+      btn.setAttribute("aria-label", "Toggle navigation menu");
+      btn.textContent = "\\u2630 Menu";
+
+      const pageTitle = sidebar.querySelector(".page-title");
+      if (pageTitle) {
+        pageTitle.insertAdjacentElement("afterend", btn);
+      } else {
+        sidebar.prepend(btn);
+      }
+
+      btn.addEventListener("click", () => {
+        sidebar.classList.toggle("menu-open");
+        btn.textContent = sidebar.classList.contains("menu-open") ? "\\u2715 Close" : "\\u2630 Menu";
+      });
+    }
+
+    setupPageFooter();
+    setupMobileMenu();
+    document.addEventListener("nav", () => {
+      setupPageFooter();
+      setupMobileMenu();
+    });
+  `)
+
   if (cfg.enableSPA) {
     componentResources.afterDOMLoaded.push(spaRouterScript)
   } else {
