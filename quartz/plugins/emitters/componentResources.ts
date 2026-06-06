@@ -317,11 +317,134 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
       });
     }
 
+    function enhanceListings() {
+      var isProjectsPage = location.pathname.indexOf("/projects") !== -1;
+
+      var sections = document.querySelectorAll(".section");
+      sections.forEach(function(section) {
+        if (section.dataset.enhanced) return;
+        section.dataset.enhanced = "true";
+
+        var link = section.querySelector("h3 a");
+        if (!link) return;
+        var href = link.getAttribute("href");
+        if (!href) return;
+
+        // Move meta next to title for both essays and projects
+        var meta = section.querySelector(".meta");
+        var desc = section.querySelector(".desc");
+        if (meta && desc && !desc.contains(meta)) {
+          desc.appendChild(meta);
+        }
+
+        var tags = section.querySelector(".tags");
+        if (tags && desc) {
+          desc.insertAdjacentElement("afterend", tags);
+        }
+
+        fetch(href).then(function(res) { return res.text(); }).then(function(html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, "text/html");
+          var article = doc.querySelector("article");
+          if (!article) return;
+
+          if (isProjectsPage) {
+            // Replace date with date range from h2
+            var articleH2 = doc.querySelector("article h2");
+            if (articleH2 && articleH2.textContent && meta) {
+              meta.textContent = articleH2.textContent.trim();
+            }
+
+            // Add description below title row
+            var descMeta = doc.querySelector('meta[name="description"]');
+            if (descMeta && descMeta.getAttribute("content")) {
+              var existing = section.querySelector(".project-description");
+              if (!existing) {
+                var p = document.createElement("p");
+                p.className = "project-description";
+                p.textContent = descMeta.getAttribute("content");
+                section.appendChild(p);
+              }
+            }
+
+            // Add small photos from the project page
+            var imgs = doc.querySelectorAll("article img");
+            if (imgs.length > 0) {
+              var gallery = document.createElement("div");
+              gallery.className = "project-photos";
+              for (var i = 0; i < imgs.length; i++) {
+                var img = document.createElement("img");
+                img.src = imgs[i].getAttribute("src") || "";
+                img.alt = imgs[i].getAttribute("alt") || "";
+                gallery.appendChild(img);
+              }
+              section.appendChild(gallery);
+            }
+          } else {
+            // Essays: add reading time
+            var text = article.textContent || "";
+            var words = text.trim().split(/\\s+/).length;
+            var minutes = Math.ceil(words / 230);
+            if (meta) {
+              var span = document.createElement("span");
+              span.className = "reading-time";
+              span.textContent = " \\u00B7 " + minutes + " min read";
+              meta.appendChild(span);
+            }
+          }
+        }).catch(function() {});
+      });
+    }
+
+    function setupRandomLink() {
+      if (document.body.dataset.slug !== "index") return;
+      var article = document.querySelector(".center article");
+      if (!article || article.querySelector(".random-link")) return;
+      var link = document.createElement("a");
+      link.className = "random-link";
+      link.href = "#";
+      link.textContent = "Read something random today";
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        fetchData.then(function(data) {
+          var keys = Object.keys(data).filter(function(k) {
+            return k !== "index" && !k.endsWith("/index") && k !== "404" && k !== "about";
+          });
+          if (keys.length === 0) return;
+          var pick = keys[Math.floor(Math.random() * keys.length)];
+          window.spaNavigate(new URL(pick, window.location.origin + "/"), false);
+        });
+      });
+      article.appendChild(link);
+    }
+
+    function setupDarkmodeLabel() {
+      var btns = document.querySelectorAll(".darkmode");
+      btns.forEach(function(btn) {
+        var label = btn.querySelector(".darkmode-label");
+        if (!label) {
+          label = document.createElement("span");
+          label.className = "darkmode-label";
+          btn.appendChild(label);
+        }
+        var theme = document.documentElement.getAttribute("saved-theme") || "light";
+        label.textContent = theme === "dark" ? "Dark \\u263E" : "Light \\u263C";
+      });
+    }
+
+    document.addEventListener("themechange", setupDarkmodeLabel);
+
     setupPageFooter();
     setupMobileMenu();
+    enhanceListings();
+    setupDarkmodeLabel();
+    setupRandomLink();
     document.addEventListener("nav", () => {
       setupPageFooter();
       setupMobileMenu();
+      enhanceListings();
+      setupDarkmodeLabel();
+      setupRandomLink();
     });
   `)
 

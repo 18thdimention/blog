@@ -24,9 +24,9 @@ configuration:
       code: IBM Plex Mono
     colors:
       lightMode:
-        light: "#C5C9C5"
-        lightgray: "#a8aca8"
-        gray: "#8a8e8a"
+        light: "#ffffff"
+        lightgray: "#d8d9c9"
+        gray: "#a0a18e"
         darkgray: "#2a2a26"
         dark: "#12120F"
         secondary: "#12120F"
@@ -34,14 +34,14 @@ configuration:
         highlight: rgba(18, 18, 15, 0.06)
         textHighlight: "#a8aca888"
       darkMode:
-        light: "#C5C9C5"
-        lightgray: "#a8aca8"
-        gray: "#8a8e8a"
-        darkgray: "#2a2a26"
-        dark: "#12120F"
-        secondary: "#12120F"
-        tertiary: "#4a4a44"
-        highlight: rgba(18, 18, 15, 0.06)
+        light: "#12120F"
+        lightgray: "#2a2a26"
+        gray: "#a0a18e"
+        darkgray: "#d8d9c9"
+        dark: "#F7F8F2"
+        secondary: "#F7F8F2"
+        tertiary: "#a0a18e"
+        highlight: rgba(247, 248, 242, 0.08)
         textHighlight: "#a8aca888"
 plugins:
   - source: github:quartz-community/created-modified-date
@@ -149,9 +149,24 @@ plugins:
       position: left
       priority: 50
   - source: github:quartz-community/graph
-    enabled: false
+    enabled: true
+    options:
+      localGraph:
+        drag: true
+        zoom: true
+        depth: -1
+        scale: 1.1
+        repelForce: 0.5
+        centerForce: 0.3
+        linkDistance: 30
+        fontSize: 0.6
+        opacityScale: 1
+        showTags: false
+        removeTags: []
+        focusOnHover: true
+        enableRadial: false
     layout:
-      position: right
+      position: afterBody
       priority: 10
   - source: github:quartz-community/search
     enabled: false
@@ -187,11 +202,10 @@ plugins:
       position: left
       priority: 10
   - source: github:quartz-community/darkmode
-    enabled: false
+    enabled: true
     layout:
       position: left
-      priority: 30
-      group: toolbar
+      priority: 12
   - source: github:quartz-community/reader-mode
     enabled: false
     layout:
@@ -217,7 +231,7 @@ plugins:
     options:
       links:
         Home: /
-        Essays: /essays
+        Articles: /articles
         Projects: /projects
         About: /about
     layout:
@@ -243,7 +257,6 @@ plugins:
       includeAll: false
       includedProperties:
         - description
-        - tags
         - aliases
       excludedProperties: []
       hidePropertiesView: true
