@@ -1,13 +1,45 @@
 @use "./variables.scss" as *;
 
 // ============================================================================
+// GoMono Nerd Font - self-hosted
+// ============================================================================
+@font-face {
+  font-family: 'GoMono Nerd Font';
+  src: url('/static/fonts/Go-Mono/GoMonoNerdFont-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GoMono Nerd Font';
+  src: url('/static/fonts/Go-Mono/GoMonoNerdFont-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GoMono Nerd Font';
+  src: url('/static/fonts/Go-Mono/GoMonoNerdFont-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GoMono Nerd Font';
+  src: url('/static/fonts/Go-Mono/GoMonoNerdFont-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+// ============================================================================
 // Minimal serif aesthetic inspired by bleuje
 // ============================================================================
 
-// --- Page title: large right-aligned serif ---
+// --- Page title: centered at top of content ---
 .page-title {
   font-size: 3.2rem;
-  text-align: right;
+  text-align: center;
   margin-bottom: 0.2rem;
   font-family: var(--headerFont);
   font-weight: 400;
@@ -31,49 +63,34 @@
   font-family: 'Tangerine', cursive;
 }
 
-// --- Left sidebar: right-aligned, black bg, scarlet red bar ---
-.sidebar.left {
-  align-items: flex-end;
-  text-align: right;
-  border-right: none;
-  padding-right: 2rem;
-  position: sticky;
-
-  // Vertical bar, shorter than full height
-  &::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 4rem;
-    bottom: 4rem;
-    width: 3px;
-    background-color: var(--dark);
-  }
+// --- Hide sidebars entirely ---
+.sidebar.left,
+.sidebar.right {
+  display: none !important;
 }
 
-// --- Footer in sidebar: repurposed as navigation ---
-.sidebar.left footer {
+// --- Footer (nav links) in afterBody area ---
+.page-footer footer {
   opacity: 1;
-  margin-bottom: 0;
-  text-align: right;
-
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1rem;
   // Hide the "Created with Quartz" paragraph
   > p {
     display: none;
   }
 
-  // Style navigation links as vertical list with bullets
   ul {
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.7rem;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.5rem;
     margin-top: 0;
     padding: 0;
     list-style: none;
   }
 
   ul li {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-family: var(--bodyFont);
   }
 
@@ -96,10 +113,14 @@
   display: none !important;
 }
 
-// --- Main content area: clean serif styling ---
+// --- Main content area: clean serif styling, centered single-column ---
 .center {
-  padding-left: 3rem !important;
-  padding-right: 25% !important;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto !important;
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+  overflow-x: hidden;
 }
 
 .center article {
@@ -108,6 +129,7 @@
   font-weight: 400;
   line-height: 1.8;
   max-width: 700px;
+  margin: 0 auto;
 }
 
 // --- Article title: centered within content area ---
@@ -116,6 +138,8 @@ article > h1,
   font-size: 3rem;
   font-weight: 400;
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 0.5rem;
   font-family: 'Tangerine', cursive;
   max-width: 700px;
@@ -139,6 +163,8 @@ article > h1,
   padding-bottom: 0;
   margin-bottom: 0;
   max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 hr {
@@ -158,23 +184,20 @@ a.internal {
   font-weight: 700;
 }
 
-// --- Remove right sidebar completely on all screens ---
-.sidebar.right {
-  display: none !important;
-}
-
-// --- Adjust grid to two-column (no right sidebar), fluid sidebar ---
-// Sidebar scales smoothly: ~30vw, clamped between 220px and 500px
+// --- Single-column layout (no sidebars) ---
 .page > #quartz-body {
-  grid-template-columns: clamp(220px, 30vw, 500px) auto !important;
-  column-gap: clamp(1rem, 2vw, 2rem) !important;
+  grid-template-columns: 1fr !important;
   grid-template-areas:
-    "grid-sidebar-left grid-header"
-    "grid-sidebar-left grid-center"
-    "grid-sidebar-left grid-footer" !important;
+    "grid-header"
+    "grid-center"
+    "grid-footer" !important;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 !important;
+  box-sizing: border-box;
 }
 
-// Scale page title and footer text fluidly
+// Scale page title fluidly
 .page-title {
   font-size: clamp(2.4rem, 3.5vw, 3.8rem) !important;
 }
@@ -185,7 +208,7 @@ a.internal {
 
 // --- Overall body typography ---
 body {
-  font-family: var(--bodyFont);
+  font-family: 'GoMono Nerd Font', 'GoMono Nerd Font Mono', monospace;
   font-weight: 400;
   font-size: 1.15rem;
   -webkit-font-smoothing: antialiased;
@@ -209,6 +232,9 @@ a {
 // --- Essay/folder listing styles ---
 .page-listing {
   margin-top: 2rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .section-ul {
@@ -222,6 +248,8 @@ a {
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--lightgray);
   max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 
   &:last-child {
     border-bottom: none;
@@ -295,6 +323,8 @@ a {
   margin-top: 0.3rem;
   line-height: 1.8;
   max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 // Small photo gallery below description
@@ -303,6 +333,8 @@ a {
   gap: 0.5rem;
   margin-top: 0.2rem;
   max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 
   img {
     flex: 1 1 0;
@@ -314,11 +346,11 @@ a {
   }
 }
 
-// --- Site footer (in sidebar) ---
+// --- Site footer (in content area) ---
 .site-footer {
-  margin-top: auto;
-  padding-bottom: 1rem;
-  text-align: right;
+  margin-top: 2rem;
+  padding: 1rem 0;
+  text-align: center;
   width: 100%;
 }
 
@@ -380,13 +412,13 @@ a {
   display: none;
 }
 
-// --- Darkmode toggle: small text style below tagline ---
+// --- Darkmode toggle: top-left of content area ---
 .darkmode {
   display: flex !important;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 0;
-  margin: 0 0 0.8rem 0 !important;
+  margin: 0 !important;
   cursor: pointer;
   background: none;
   border: none;
@@ -421,7 +453,7 @@ a {
 .graph {
   display: none;
   max-width: 700px;
-  margin-top: 2rem;
+  margin: 2rem auto 0;
 
   // Hide the "Graph View" heading
   & > h3 {
@@ -446,118 +478,10 @@ body[data-slug="index"] .graph {
   display: block;
 }
 
-// --- Mobile adjustments ---
-@media all and (max-width: 800px) {
-  .page > #quartz-body {
-    grid-template-columns: auto !important;
-    grid-template-areas:
-      "grid-sidebar-left"
-      "grid-header"
-      "grid-center"
-      "grid-footer" !important;
-  }
-
-  .sidebar.left {
-    border-right: none;
-    border-bottom: 3px solid var(--dark);
-    padding: 1.5rem 1rem;
-    padding-bottom: 1.5rem;
-    position: initial !important;
-    height: unset !important;
-    flex-direction: column !important;
-    align-items: center;
-    text-align: center;
-
-    &::after {
-      display: none;
-    }
-  }
-
-  // Page title centered on mobile
-  .sidebar.left .page-title {
-    text-align: center;
-  }
-
-  // Tagline centered
-  .sidebar.left .page-title::after {
-    text-align: center;
-  }
-
-  // Darkmode toggle centered on mobile
-  .darkmode {
-    justify-content: center;
-  }
-
-  // Show hamburger button on mobile
-  .mobile-menu-btn {
-    display: block;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: var(--dark);
-    background: none;
-    border: 1px solid var(--gray);
-    border-radius: 4px;
-    padding: 0.4rem 1.2rem;
-    user-select: none;
-    font-family: var(--bodyFont);
-    letter-spacing: 0.05em;
-    margin-top: 0.5rem;
-
-    &:hover {
-      border-color: var(--dark);
-    }
-  }
-
-  // Nav hidden by default on mobile
-  .sidebar.left footer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    width: 100%;
-    text-align: center;
-  }
-
-  // Show nav when menu is open — expands vertically below
-  .sidebar.left.menu-open footer {
-    max-height: 500px;
-  }
-
-  .sidebar.left footer ul {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.8rem;
-  }
-
-  // Move footer out of sidebar visually — pin to bottom of page
-  .sidebar.left {
-    position: relative !important;
-  }
-
-  .site-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: center;
-    padding: 0.8rem 1rem;
-    background-color: var(--light);
-    z-index: 10;
-  }
-
-  // Add bottom padding to page so content doesn't hide behind fixed footer
-  .page > #quartz-body {
-    padding-bottom: 3rem;
-  }
-
-  // Center content area on mobile
+// --- Mobile/tablet adjustments ---
+@media all and (max-width: 1200px) {
   .center {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
-  }
-
-  article > h1,
-  .article-title {
-    text-align: center;
   }
 }

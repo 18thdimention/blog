@@ -258,12 +258,12 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
     `)
   }
 
-  // Custom site footer and mobile menu
+  // Custom site footer
   componentResources.afterDOMLoaded.push(`
     function setupPageFooter() {
-      const sidebar = document.querySelector(".sidebar.left");
-      if (!sidebar) return;
-      const existing = sidebar.querySelector(".site-footer");
+      const center = document.querySelector(".center");
+      if (!center) return;
+      const existing = center.querySelector(".site-footer");
       if (existing) existing.remove();
 
       const footer = document.createElement("div");
@@ -275,7 +275,7 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
         '<a href="https://github.com/18thdimention" target="_blank" rel="noopener noreferrer">Github</a> | ' +
         '<a href="#" class="copy-email" data-email="18thdimention@gmail.com">Email</a>' +
         '</p>';
-      sidebar.appendChild(footer);
+      center.appendChild(footer);
 
       const emailLink = footer.querySelector(".copy-email");
       if (emailLink) {
@@ -291,30 +291,6 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
           });
         });
       }
-    }
-
-    function setupMobileMenu() {
-      const sidebar = document.querySelector(".sidebar.left");
-      if (!sidebar) return;
-      const existing = sidebar.querySelector(".mobile-menu-btn");
-      if (existing) existing.remove();
-
-      const btn = document.createElement("button");
-      btn.className = "mobile-menu-btn";
-      btn.setAttribute("aria-label", "Toggle navigation menu");
-      btn.textContent = "\\u2630 Menu";
-
-      const pageTitle = sidebar.querySelector(".page-title");
-      if (pageTitle) {
-        pageTitle.insertAdjacentElement("afterend", btn);
-      } else {
-        sidebar.prepend(btn);
-      }
-
-      btn.addEventListener("click", () => {
-        sidebar.classList.toggle("menu-open");
-        btn.textContent = sidebar.classList.contains("menu-open") ? "\\u2715 Close" : "\\u2630 Menu";
-      });
     }
 
     function enhanceListings() {
@@ -435,13 +411,11 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
     document.addEventListener("themechange", setupDarkmodeLabel);
 
     setupPageFooter();
-    setupMobileMenu();
     enhanceListings();
     setupDarkmodeLabel();
     setupRandomLink();
     document.addEventListener("nav", () => {
       setupPageFooter();
-      setupMobileMenu();
       enhanceListings();
       setupDarkmodeLabel();
       setupRandomLink();

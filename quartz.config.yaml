@@ -199,13 +199,13 @@ plugins:
   - source: github:quartz-community/page-title
     enabled: true
     layout:
-      position: left
-      priority: 10
+      position: beforeBody
+      priority: 1
   - source: github:quartz-community/darkmode
     enabled: true
     layout:
-      position: left
-      priority: 12
+      position: beforeBody
+      priority: 2
   - source: github:quartz-community/reader-mode
     enabled: false
     layout:
@@ -235,8 +235,8 @@ plugins:
         Projects: /projects
         About: /about
     layout:
-      position: left
-      priority: 20
+      position: afterBody
+      priority: 100
   - source: github:quartz-community/recent-notes
     enabled: false
   - source: github:quartz-community/spacer
