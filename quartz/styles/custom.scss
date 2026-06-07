@@ -188,6 +188,29 @@ article > h1,
   max-width: 700px;
 }
 
+// --- Disable title animation effects ---
+.page-title,
+.page-title::before,
+.page-title::after,
+.page-title a,
+article > h1,
+.article-title {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: var(--dark) !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  clip-path: none !important;
+}
+
 // --- Subheadings ---
 .center article h2,
 .center article h3,

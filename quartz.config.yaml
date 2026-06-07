@@ -28,25 +28,25 @@ configuration:
         weights: [400, 500, 600, 700]
     colors:
       lightMode:
-        light: "#090E13"
-        lightgray: "#868FA4"
-        gray: "#8992A7"
-        darkgray: "#C4C8C6"
-        dark: "#8BA4B0"
-        secondary: "#8BA4B0"
-        tertiary: "#8992A7"
-        highlight: rgba(139, 164, 176, 0.15)
-        textHighlight: "#8BA4B055"
+        light: "#faf8f8"
+        lightgray: "#e5e5e5"
+        gray: "#b8b8b8"
+        darkgray: "#4e4e4e"
+        dark: "#2b2b2b"
+        secondary: "#284b63"
+        tertiary: "#84a59d"
+        highlight: rgba(143, 159, 169, 0.15)
+        textHighlight: "#fff23688"
       darkMode:
-        light: "#090E13"
-        lightgray: "#868FA4"
-        gray: "#8992A7"
-        darkgray: "#C4C8C6"
-        dark: "#8BA4B0"
-        secondary: "#8BA4B0"
-        tertiary: "#8992A7"
-        highlight: rgba(139, 164, 176, 0.15)
-        textHighlight: "#8BA4B055"
+        light: "#161618"
+        lightgray: "#393639"
+        gray: "#646464"
+        darkgray: "#d4d4d4"
+        dark: "#ebebec"
+        secondary: "#7b97aa"
+        tertiary: "#84a59d"
+        highlight: rgba(143, 159, 169, 0.15)
+        textHighlight: "#b3aa0288"
 plugins:
   - source: github:quartz-community/created-modified-date
     enabled: true
@@ -212,7 +212,7 @@ plugins:
       position: beforeBody
       priority: 30
   - source: github:quartz-community/page-title
-    enabled: false
+    enabled: true
     layout:
       position: beforeBody
       priority: 1
