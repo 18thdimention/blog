@@ -665,24 +665,34 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
       });
     }
     function setupSearchButtonVisibility() {
-      var isIndex = document.body.dataset.slug === "index";
       var searches = document.querySelectorAll(".search");
-
-      searches.forEach(function(search, index) {
-        if (isIndex && index === 0) {
-          search.style.display = "";
+      searches.forEach(function(search) {
+        search.style.display = "";
+      });
+    }
+    function setupKoreanTextSizing() {
+      var hangulRegex = /[\u3131-\u318E\uAC00-\uD7A3]/;
+      var titleNodes = document.querySelectorAll(
+        ".center h1, .center h2, .center h3, .center h4, .center h5, .center h6, .article-title, .page-title, .page-title a, .home-preview-heading, .home-articles-link, .section h3 a",
+      );
+      titleNodes.forEach(function(node) {
+        var text = node.textContent || "";
+        if (hangulRegex.test(text)) {
+          node.classList.add("has-korean-title");
         } else {
-          search.style.display = "none";
+          node.classList.remove("has-korean-title");
+        }
+      });
 
-          var container = search.querySelector(".search-container");
-          if (container) {
-            container.classList.remove("active");
-          }
-
-          var button = search.querySelector(".search-button");
-          if (button) {
-            button.setAttribute("aria-expanded", "false");
-          }
+      var normalNodes = document.querySelectorAll(
+        ".center p, .center li, .center td, .center th, .center blockquote, .center .project-description, .center .reading-time, .center .site-footer-text",
+      );
+      normalNodes.forEach(function(node) {
+        var text = node.textContent || "";
+        if (hangulRegex.test(text)) {
+          node.classList.add("has-korean-text");
+        } else {
+          node.classList.remove("has-korean-text");
         }
       });
     }
@@ -748,6 +758,7 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
     setupHomeProjectsPreview();
     setupHomeWorkingOnPreview();
     setupSearchButtonVisibility();
+    setupKoreanTextSizing();
     setupGraphMode();
     document.addEventListener("nav", () => {
       setupPageFooter();
@@ -757,6 +768,7 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
       setupHomeProjectsPreview();
       setupHomeWorkingOnPreview();
       setupSearchButtonVisibility();
+      setupKoreanTextSizing();
       setupGraphMode();
     });
   `)

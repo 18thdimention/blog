@@ -210,10 +210,10 @@ plugins:
       position: beforeBody
       priority: 1
   - source: github:quartz-community/darkmode
-    enabled: false
+    enabled: true
     layout:
       position: beforeBody
-      priority: 2
+      priority: 3
   - source: github:quartz-community/reader-mode
     enabled: false
     layout:
