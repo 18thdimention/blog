@@ -4,29 +4,30 @@
 // GoMono Nerd Font - self-hosted
 // ============================================================================
 @font-face {
-  font-family: 'GoMono Nerd Font';
-  src: url('/static/fonts/Go-Mono/GoMonoNerdFont-Regular.ttf') format('truetype');
+  font-family: "GoMono Nerd Font";
+  src: url("/static/fonts/Go-Mono/GoMonoNerdFont-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
-  font-family: 'GoMono Nerd Font';
-  src: url('/static/fonts/Go-Mono/GoMonoNerdFont-Bold.ttf') format('truetype');
+  font-family: "GoMono Nerd Font";
+  src: url("/static/fonts/Go-Mono/GoMonoNerdFont-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'GoMono Nerd Font';
-  src: url('/static/fonts/Go-Mono/GoMonoNerdFont-Italic.ttf') format('truetype');
+  font-family: "GoMono Nerd Font";
+  src: url("/static/fonts/Go-Mono/GoMonoNerdFont-Italic.ttf") format("truetype");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
-  font-family: 'GoMono Nerd Font';
-  src: url('/static/fonts/Go-Mono/GoMonoNerdFont-BoldItalic.ttf') format('truetype');
+  font-family: "GoMono Nerd Font";
+  src: url("/static/fonts/Go-Mono/GoMonoNerdFont-BoldItalic.ttf") format("truetype");
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -35,33 +36,6 @@
 // ============================================================================
 // Minimal serif aesthetic inspired by bleuje
 // ============================================================================
-
-// --- Page title: centered at top of content ---
-.page-title {
-  font-size: 3.2rem;
-  text-align: center;
-  margin-bottom: 0.2rem;
-  font-family: var(--headerFont);
-  font-weight: 400;
-
-  a {
-    color: var(--dark) !important;
-    font-weight: 300;
-  }
-}
-
-// --- Tagline injected via pseudo-element ---
-.page-title::after {
-  content: "mathematician and writer";
-  display: block;
-  font-size: 2rem;
-  font-style: normal;
-  font-weight: 400;
-  color: var(--darkgray);
-  margin-top: 0.5rem;
-  margin-bottom: 0.4rem;
-  font-family: 'Tangerine', cursive;
-}
 
 // --- Hide sidebars entirely ---
 .sidebar.left,
@@ -108,6 +82,75 @@
   }
 }
 
+// --- Home page article preview list (under random link) ---
+.home-articles-preview {
+  margin-top: 0.75rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-articles-list {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0;
+}
+
+.home-articles-item {
+  display: grid;
+  grid-template-columns: 9.5rem 1fr;
+  align-items: baseline;
+  gap: 0.9rem;
+  margin: 0.3rem 0;
+}
+
+.home-articles-date {
+  font-family: "GoMono Nerd Font", var(--codeFont);
+  color: var(--gray);
+  font-size: clamp(0.95rem, 1.5vw, 1.35rem);
+  white-space: nowrap;
+}
+
+.home-articles-link {
+  font-family: var(--headerFont);
+  font-size: clamp(1.4rem, 3.4vw, 2.45rem);
+  line-height: 1.1;
+  color: var(--secondary) !important;
+  text-decoration: none !important;
+  background-color: transparent !important;
+
+  &:hover {
+    color: var(--tertiary) !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px;
+  }
+}
+
+.home-articles-more {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.28rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--lightgray);
+  font-family: "GoMono Nerd Font", var(--codeFont);
+  font-size: 0.95rem;
+  color: var(--secondary) !important;
+  text-decoration: none !important;
+  background-color: transparent !important;
+
+  &:hover {
+    color: var(--tertiary) !important;
+    border-color: var(--gray);
+    background-color: var(--highlight) !important;
+  }
+}
+
+.home-articles-empty {
+  font-family: "GoMono Nerd Font", var(--codeFont);
+  color: var(--gray);
+  font-size: 0.95rem;
+}
+
 // --- Hide the BOTTOM footer (grid-footer area) to prevent duplication ---
 #quartz-body > footer {
   display: none !important;
@@ -135,13 +178,13 @@
 // --- Article title: centered within content area ---
 article > h1,
 .article-title {
-  font-size: 3rem;
+  font-size: 1.4rem;
   font-weight: 400;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 0.5rem;
-  font-family: 'Tangerine', cursive;
+  font-family: "UnifrakturMaguntia", var(--headerFont);
   max-width: 700px;
 }
 
@@ -151,7 +194,7 @@ article > h1,
 .center article h4,
 .center article h5,
 .center article h6 {
-  font-family: 'Tangerine', cursive;
+  font-family: var(--headerFont);
   font-size: 1.6rem;
   font-weight: 700;
   margin-top: 2.5rem;
@@ -197,18 +240,13 @@ a.internal {
   box-sizing: border-box;
 }
 
-// Scale page title fluidly
-.page-title {
-  font-size: clamp(2.4rem, 3.5vw, 3.8rem) !important;
-}
-
 .site-footer-text {
   font-size: clamp(0.75rem, 1.1vw, 1rem);
 }
 
 // --- Overall body typography ---
 body {
-  font-family: 'GoMono Nerd Font', 'GoMono Nerd Font Mono', monospace;
+  font-family: var(--bodyFont);
   font-weight: 400;
   font-size: 1.15rem;
   -webkit-font-smoothing: antialiased;
@@ -309,7 +347,6 @@ a {
   font-style: italic;
 }
 
-
 // ============================================================================
 // Project listing (essay-style with description + photos)
 // ============================================================================
@@ -384,10 +421,18 @@ a {
 }
 
 @keyframes fadeInOut {
-  0% { opacity: 0; }
-  15% { opacity: 1; }
-  75% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 // --- "Read something random" link on home page ---
@@ -449,9 +494,9 @@ a {
   }
 }
 
-// --- Graph view: hidden by default, shown only on home page via JS ---
+// --- Graph view: visible on all pages ---
 .graph {
-  display: none;
+  display: block;
   max-width: 700px;
   margin: 2rem auto 0;
 
@@ -466,16 +511,11 @@ a {
     border: 1px solid var(--lightgray);
     border-radius: 8px;
   }
-
-  // Hide global graph toggle (already showing all notes)
-  .global-graph-icon {
-    display: none;
-  }
 }
 
-// Show graph only on home page
-body[data-slug="index"] .graph {
-  display: block;
+// Keep global graph toggle for index only
+body:not([data-slug="index"]) .graph .global-graph-icon {
+  display: none;
 }
 
 // --- Mobile/tablet adjustments ---
@@ -483,5 +523,10 @@ body[data-slug="index"] .graph {
   .center {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+  }
+
+  .home-articles-item {
+    grid-template-columns: 7.2rem 1fr;
+    gap: 0.55rem;
   }
 }

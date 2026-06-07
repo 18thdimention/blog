@@ -16,33 +16,37 @@ configuration:
     fontOrigin: googleFonts
     cdnCaching: true
     typography:
-      header: Mrs Saint Delafield
+      header:
+        name: EB Garamond
+        weights: [400, 500, 600, 700]
       body:
-        name: Cormorant Garamond
-        weights: [300, 400, 700]
+        name: EB Garamond
+        weights: [400, 500, 600, 700]
         includeItalic: true
-      code: IBM Plex Mono
+      code:
+        name: EB Garamond
+        weights: [400, 500, 600, 700]
     colors:
       lightMode:
-        light: "#ffffff"
-        lightgray: "#d8d9c9"
-        gray: "#a0a18e"
-        darkgray: "#2a2a26"
-        dark: "#12120F"
-        secondary: "#12120F"
-        tertiary: "#4a4a44"
-        highlight: rgba(18, 18, 15, 0.06)
-        textHighlight: "#a8aca888"
+        light: "#090E13"
+        lightgray: "#868FA4"
+        gray: "#8992A7"
+        darkgray: "#C4C8C6"
+        dark: "#8BA4B0"
+        secondary: "#8BA4B0"
+        tertiary: "#8992A7"
+        highlight: rgba(139, 164, 176, 0.15)
+        textHighlight: "#8BA4B055"
       darkMode:
-        light: "#12120F"
-        lightgray: "#2a2a26"
-        gray: "#a0a18e"
-        darkgray: "#d8d9c9"
-        dark: "#F7F8F2"
-        secondary: "#F7F8F2"
-        tertiary: "#a0a18e"
-        highlight: rgba(247, 248, 242, 0.08)
-        textHighlight: "#a8aca888"
+        light: "#090E13"
+        lightgray: "#868FA4"
+        gray: "#8992A7"
+        darkgray: "#C4C8C6"
+        dark: "#8BA4B0"
+        secondary: "#8BA4B0"
+        tertiary: "#8992A7"
+        highlight: rgba(139, 164, 176, 0.15)
+        textHighlight: "#8BA4B055"
 plugins:
   - source: github:quartz-community/created-modified-date
     enabled: true
@@ -154,28 +158,39 @@ plugins:
       localGraph:
         drag: true
         zoom: true
-        depth: -1
-        scale: 1.1
-        repelForce: 0.5
-        centerForce: 0.3
-        linkDistance: 30
+        depth: 1
+        scale: 0.8
+        repelForce: 10
+        centerForce: 0.52
+        linkDistance: 150
         fontSize: 0.6
         opacityScale: 1
         showTags: false
         removeTags: []
         focusOnHover: true
-        enableRadial: false
+        enableRadial: true
+      globalGraph:
+        drag: true
+        zoom: true
+        depth: -1
+        scale: 0.8
+        repelForce: 10
+        centerForce: 0.52
+        linkDistance: 250
+        fontSize: 0.6
+        opacityScale: 1
+        showTags: false
+        removeTags: []
+        focusOnHover: true
+        enableRadial: true
     layout:
       position: afterBody
       priority: 10
   - source: github:quartz-community/search
-    enabled: false
+    enabled: true
     layout:
-      position: left
-      priority: 20
-      group: toolbar
-      groupOptions:
-        grow: true
+      position: beforeBody
+      priority: 2
   - source: github:quartz-community/backlinks
     enabled: false
     layout:
@@ -197,12 +212,12 @@ plugins:
       position: beforeBody
       priority: 30
   - source: github:quartz-community/page-title
-    enabled: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 1
   - source: github:quartz-community/darkmode
-    enabled: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 2
@@ -227,7 +242,7 @@ plugins:
       position: afterBody
       priority: 10
   - source: github:quartz-community/footer
-    enabled: true
+    enabled: false
     options:
       links:
         Home: /
