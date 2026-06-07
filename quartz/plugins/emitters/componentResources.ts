@@ -270,7 +270,7 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
       footer.className = "site-footer";
       footer.innerHTML =
         '<p class="site-footer-text">' +
-        '\\u00A9 2026 Doyeon Kim | ' +
+        '\\u00A9 2026 | ' +
         '<a href="https://x.com/yxrjkv" target="_blank" rel="noopener noreferrer">Twitter</a> | ' +
         '<a href="https://github.com/18thdimention" target="_blank" rel="noopener noreferrer">Github</a> | ' +
         '<a href="#" class="copy-email" data-email="18thdimention@gmail.com">Email</a>' +
