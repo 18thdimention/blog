@@ -97,12 +97,6 @@
       "commit": "026e63bd46d5f7feed58373f999ed98bf8248a26",
       "installedAt": "2026-06-03T12:42:20.552Z"
     },
-    "encrypted-pages": {
-      "source": "github:quartz-community/encrypted-pages",
-      "resolved": "https://github.com/quartz-community/encrypted-pages.git",
-      "commit": "e0e08e7afa40b97909fb24fd7509ddaa10116425",
-      "installedAt": "2026-06-03T12:42:21.293Z"
-    },
     "explicit-publish": {
       "source": "github:quartz-community/explicit-publish",
       "resolved": "https://github.com/quartz-community/explicit-publish.git",

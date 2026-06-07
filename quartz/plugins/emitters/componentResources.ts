@@ -83,6 +83,14 @@ async function joinScripts(scripts: string[]): Promise<string> {
 
 function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentResources) {
   const cfg = ctx.cfg.configuration
+  componentResources.beforeDOMLoaded.push(`
+    const savedTheme = localStorage.getItem("theme");
+    const theme = savedTheme === "light" || savedTheme === "dark" ? savedTheme : "dark";
+    document.documentElement.setAttribute("saved-theme", theme);
+    if (!savedTheme) {
+      localStorage.setItem("theme", "dark");
+    }
+  `)
 
   // popovers
   if (cfg.enablePopovers) {
@@ -372,15 +380,42 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
       });
     }
 
-    function setupRandomLink() {
+    function setupHomeArticlesPreview() {
       if (document.body.dataset.slug !== "index") return;
       var article = document.querySelector(".center article");
-      if (!article || article.querySelector(".random-link")) return;
-      var link = document.createElement("a");
-      link.className = "random-link";
-      link.href = "#";
-      link.textContent = "Read something random today";
-      link.addEventListener("click", function(e) {
+      if (!article) return;
+
+      var existing = article.querySelector(".home-articles-preview");
+      if (existing) existing.remove();
+      var legacyRandomLink = article.querySelector(".random-link");
+      if (legacyRandomLink) legacyRandomLink.remove();
+
+      var section = document.createElement("section");
+      section.className = "home-articles-preview";
+      var heading = document.createElement("h3");
+      heading.className = "home-preview-heading";
+      heading.textContent = "Articles";
+      section.appendChild(heading);
+
+      var list = document.createElement("ul");
+      list.className = "home-articles-list";
+      section.appendChild(list);
+      var actions = document.createElement("p");
+      actions.className = "home-articles-actions";
+
+      var moreLink = document.createElement("a");
+      moreLink.className = "internal";
+      moreLink.href = "./articles";
+      moreLink.textContent = "List more";
+
+      var separator = document.createElement("span");
+      separator.textContent = " or ";
+
+      var randomLink = document.createElement("a");
+      randomLink.className = "internal";
+      randomLink.href = "#";
+      randomLink.textContent = "read something random";
+      randomLink.addEventListener("click", function(e) {
         e.preventDefault();
         fetchData.then(function(data) {
           var keys = Object.keys(data).filter(function(k) {
@@ -391,33 +426,13 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
           window.spaNavigate(new URL(pick, window.location.origin + "/"), false);
         });
       });
-      article.appendChild(link);
-    }
-    function setupHomeArticlesPreview() {
-      if (document.body.dataset.slug !== "index") return;
-      var article = document.querySelector(".center article");
-      if (!article) return;
 
-      var existing = article.querySelector(".home-articles-preview");
-      if (existing) existing.remove();
+      actions.appendChild(moreLink);
+      actions.appendChild(separator);
+      actions.appendChild(randomLink);
+      section.appendChild(actions);
 
-      var randomLink = article.querySelector(".random-link");
-      if (!randomLink) return;
-
-      var section = document.createElement("section");
-      section.className = "home-articles-preview";
-
-      var list = document.createElement("ul");
-      list.className = "home-articles-list";
-      section.appendChild(list);
-
-      var moreLink = document.createElement("a");
-      moreLink.className = "home-articles-more internal";
-      moreLink.href = "./articles";
-      moreLink.textContent = "list more";
-      section.appendChild(moreLink);
-
-      randomLink.insertAdjacentElement("afterend", section);
+      article.appendChild(section);
 
       var articlesUrl = new URL("articles", window.location.href);
       fetch(articlesUrl.toString())
@@ -475,6 +490,166 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
           list.appendChild(empty);
         });
     }
+    function setupHomeProjectsPreview() {
+      if (document.body.dataset.slug !== "index") return;
+      var article = document.querySelector(".center article");
+      if (!article) return;
+
+      var existing = article.querySelector(".home-projects-preview");
+      if (existing) existing.remove();
+
+      var anchor = article.querySelector(".home-articles-preview");
+      if (!anchor) return;
+
+      var section = document.createElement("section");
+      section.className = "home-projects-preview";
+      var heading = document.createElement("h3");
+      heading.className = "home-preview-heading";
+      heading.textContent = "Projects";
+      section.appendChild(heading);
+
+      var list = document.createElement("ul");
+      list.className = "home-articles-list";
+      section.appendChild(list);
+
+      anchor.insertAdjacentElement("afterend", section);
+
+      var projectsUrl = new URL("projects", window.location.href);
+      fetch(projectsUrl.toString())
+        .then(function(res) {
+          return res.text();
+        })
+        .then(function(html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, "text/html");
+          var rows = doc.querySelectorAll(".section-li");
+          var rendered = 0;
+
+          rows.forEach(function(row) {
+            if (rendered >= 8) return;
+
+            var link = row.querySelector(".desc a");
+            if (!link) return;
+
+            var href = link.getAttribute("href");
+            if (!href) return;
+
+            var title = (link.textContent || "").trim();
+            var dateNode = row.querySelector(".meta");
+            var date = dateNode && dateNode.textContent ? dateNode.textContent.trim() : "";
+
+            var item = document.createElement("li");
+            item.className = "home-articles-item";
+
+            var dateEl = document.createElement("span");
+            dateEl.className = "home-articles-date";
+            dateEl.textContent = date || "--";
+
+            var titleEl = document.createElement("a");
+            titleEl.className = "home-articles-link internal";
+            titleEl.href = new URL(href, projectsUrl).toString();
+            titleEl.textContent = title;
+
+            item.appendChild(dateEl);
+            item.appendChild(titleEl);
+            list.appendChild(item);
+            rendered++;
+          });
+
+          if (rendered === 0) {
+            var empty = document.createElement("li");
+            empty.className = "home-articles-empty";
+            empty.textContent = "No projects yet";
+            list.appendChild(empty);
+          }
+        })
+        .catch(function() {
+          var empty = document.createElement("li");
+          empty.className = "home-articles-empty";
+          empty.textContent = "Could not load projects";
+          list.appendChild(empty);
+        });
+    }
+    function setupHomeWorkingOnPreview() {
+      if (document.body.dataset.slug !== "index") return;
+      var article = document.querySelector(".center article");
+      if (!article) return;
+
+      var existing = article.querySelector(".home-working-on-preview");
+      if (existing) existing.remove();
+
+      var anchor =
+        article.querySelector(".home-projects-preview") ||
+        article.querySelector(".home-articles-preview");
+      if (!anchor) return;
+
+      var section = document.createElement("section");
+      section.className = "home-working-on-preview";
+      var heading = document.createElement("h3");
+      heading.className = "home-preview-heading";
+      heading.textContent = "What am I working on";
+      section.appendChild(heading);
+
+      var list = document.createElement("ul");
+      list.className = "home-articles-list";
+      section.appendChild(list);
+
+      anchor.insertAdjacentElement("afterend", section);
+
+      var inboxUrl = new URL("inbox", window.location.href);
+      fetch(inboxUrl.toString())
+        .then(function(res) {
+          return res.text();
+        })
+        .then(function(html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, "text/html");
+          var rows = doc.querySelectorAll(".section-li");
+          var rendered = 0;
+
+          rows.forEach(function(row) {
+            var link = row.querySelector(".desc a");
+            if (!link) return;
+
+            var href = link.getAttribute("href");
+            if (!href) return;
+
+            var title = (link.textContent || "").trim();
+            var dateNode = row.querySelector(".meta");
+            var date = dateNode && dateNode.textContent ? dateNode.textContent.trim() : "";
+
+            var item = document.createElement("li");
+            item.className = "home-articles-item";
+
+            var dateEl = document.createElement("span");
+            dateEl.className = "home-articles-date";
+            dateEl.textContent = date || "--";
+
+            var titleEl = document.createElement("a");
+            titleEl.className = "home-articles-link internal";
+            titleEl.href = new URL(href, inboxUrl).toString();
+            titleEl.textContent = title;
+
+            item.appendChild(dateEl);
+            item.appendChild(titleEl);
+            list.appendChild(item);
+            rendered++;
+          });
+
+          if (rendered === 0) {
+            var empty = document.createElement("li");
+            empty.className = "home-articles-empty";
+            empty.textContent = "No inbox files yet";
+            list.appendChild(empty);
+          }
+        })
+        .catch(function() {
+          var empty = document.createElement("li");
+          empty.className = "home-articles-empty";
+          empty.textContent = "Could not load inbox";
+          list.appendChild(empty);
+        });
+    }
 
     function setupDarkmodeLabel() {
       var btns = document.querySelectorAll(".darkmode");
@@ -514,8 +689,43 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
     function setupGraphMode() {
       var isIndex = document.body.dataset.slug === "index";
       var graphs = document.querySelectorAll(".graph");
+      var shouldRerender = false;
+      var homeGraphOverrides = {
+        depth: -1,
+        enableRadial: true,
+        centerForce: 0.9,
+        repelForce: 0.15,
+        linkDistance: 18,
+        fontSize: 0.45,
+      };
 
       graphs.forEach(function(graph) {
+        var localGraph = graph.querySelector(".graph-container");
+        if (localGraph) {
+          var originalCfg = localGraph.getAttribute("data-original-cfg");
+          if (!originalCfg) {
+            originalCfg = localGraph.getAttribute("data-cfg") || "{}";
+            localGraph.setAttribute("data-original-cfg", originalCfg);
+          }
+
+          var baseCfg;
+          try {
+            baseCfg = JSON.parse(originalCfg);
+          } catch (_) {
+            baseCfg = {};
+          }
+
+          var targetCfg = Object.assign({}, baseCfg);
+          if (isIndex) {
+            targetCfg = Object.assign(targetCfg, homeGraphOverrides);
+          }
+
+          var targetCfgRaw = JSON.stringify(targetCfg);
+          if (localGraph.getAttribute("data-cfg") !== targetCfgRaw) {
+            localGraph.setAttribute("data-cfg", targetCfgRaw);
+            shouldRerender = true;
+          }
+        }
         var icon = graph.querySelector(".global-graph-icon");
         var globalOuter = graph.querySelector(".global-graph-outer");
         if (!icon || !globalOuter) return;
@@ -523,6 +733,10 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
           icon.click();
         }
       });
+
+      if (shouldRerender) {
+        document.dispatchEvent(new CustomEvent("render", { detail: { url: document.body.dataset.slug } }));
+      }
     }
 
     document.addEventListener("themechange", setupDarkmodeLabel);
@@ -530,16 +744,18 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
     setupPageFooter();
     enhanceListings();
     setupDarkmodeLabel();
-    setupRandomLink();
     setupHomeArticlesPreview();
+    setupHomeProjectsPreview();
+    setupHomeWorkingOnPreview();
     setupSearchButtonVisibility();
     setupGraphMode();
     document.addEventListener("nav", () => {
       setupPageFooter();
       enhanceListings();
       setupDarkmodeLabel();
-      setupRandomLink();
       setupHomeArticlesPreview();
+      setupHomeProjectsPreview();
+      setupHomeWorkingOnPreview();
       setupSearchButtonVisibility();
       setupGraphMode();
     });

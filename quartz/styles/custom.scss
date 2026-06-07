@@ -1,5 +1,9 @@
 @use "./variables.scss" as *;
 
+:root {
+  --bodyFont: "Times New Roman", Times, serif;
+}
+
 // ============================================================================
 // GoMono Nerd Font - self-hosted
 // ============================================================================
@@ -83,11 +87,20 @@
 }
 
 // --- Home page article preview list (under random link) ---
-.home-articles-preview {
+.home-articles-preview,
+.home-projects-preview,
+.home-working-on-preview {
   margin-top: 0.75rem;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.home-preview-heading {
+  margin: 0.5rem 0 0.25rem;
+  font-family: var(--headerFont);
+  font-size: 1em;
+  font-weight: 700;
 }
 
 .home-articles-list {
@@ -100,20 +113,20 @@
   display: grid;
   grid-template-columns: 9.5rem 1fr;
   align-items: baseline;
-  gap: 0.9rem;
+  gap: 0.45rem;
   margin: 0.3rem 0;
 }
 
 .home-articles-date {
   font-family: "GoMono Nerd Font", var(--codeFont);
   color: var(--gray);
-  font-size: clamp(0.95rem, 1.5vw, 1.35rem);
+  font-size: 1rem;
   white-space: nowrap;
 }
 
 .home-articles-link {
   font-family: var(--headerFont);
-  font-size: clamp(1.4rem, 3.4vw, 2.45rem);
+  font-size: 1.15rem;
   line-height: 1.1;
   color: var(--secondary) !important;
   text-decoration: none !important;
@@ -126,22 +139,22 @@
   }
 }
 
-.home-articles-more {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.28rem 0.8rem;
-  border-radius: 999px;
-  border: 1px solid var(--lightgray);
-  font-family: "GoMono Nerd Font", var(--codeFont);
-  font-size: 0.95rem;
-  color: var(--secondary) !important;
-  text-decoration: none !important;
-  background-color: transparent !important;
+.home-articles-actions {
+  margin-top: 1.5rem;
+  font-family: var(--bodyFont);
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--gray);
 
-  &:hover {
-    color: var(--tertiary) !important;
-    border-color: var(--gray);
-    background-color: var(--highlight) !important;
+  a {
+    color: var(--gray) !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px;
+    background-color: transparent !important;
+
+    &:hover {
+      color: var(--dark) !important;
+    }
   }
 }
 
@@ -218,7 +231,7 @@ article > h1,
 .center article h5,
 .center article h6 {
   font-family: var(--headerFont);
-  font-size: 1.6rem;
+  font-size: 1em;
   font-weight: 700;
   margin-top: 2.5rem;
 }
@@ -333,8 +346,8 @@ a {
 
 .section h3 {
   font-family: var(--bodyFont);
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 400;
   margin: 0;
 
   a {
@@ -550,6 +563,6 @@ body:not([data-slug="index"]) .graph .global-graph-icon {
 
   .home-articles-item {
     grid-template-columns: 7.2rem 1fr;
-    gap: 0.55rem;
+    gap: 0.3rem;
   }
 }
